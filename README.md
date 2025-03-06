@@ -219,6 +219,96 @@ To run this bot we recommend you a cloud instance with a minimum of:
 
 - Minimal (advised) system requirements: 2GB RAM, 1GB disk space, 2vCPU
 
+### Custom Strategy
+
+# Download historical data for your pairs
+freqtrade download-data --timeframe 5m 1h --days 90
+
+# Run a backtest
+freqtrade backtesting --strategy ComprehensiveCryptoStrategy --timeframe 5m --timerange 20230101-20230401
+
+# Run hyperopt for 100 epochs; fine tune your strategy
+freqtrade hyperopt --hyperopt ComprehensiveCryptoHyperopt --strategy ComprehensiveCryptoStrategy --epochs 100 --spaces buy sell roi stoploss trailing
+
+# Risk calibration
+
+Adjust these key parameters in the strategy file:
+
+risk_per_trade: Percentage of capital risked per trade (0.5-3%)
+max_drawdown: Maximum acceptable portfolio drawdown (5-20%)
+stoploss: Initial stop loss percentage (-2.5% default)
+trailing_stop_positive: Profit level to activate trailing stop
+max_open_trades: Controls diversification (default: 5)
+
+# Daily Trading Workflow
+When using this framework for daily trading:
+Morning Preparation (Before Market Activity)
+
+Review overnight market movement and news
+Check technical setups on watchlist pairs
+Update pair whitelist if necessary
+Run a quick backtest simulation with recent data
+
+Strategy Monitoring (During Trading)
+
+Monitor bot performance using Freqtrade API
+Check Telegram notifications (if enabled)
+Review trade journal entries
+Observe market conditions for any adaptations needed
+
+Evening Analysis (After Active Trading)
+
+Review day's trades and performance
+Update trade journal with observations
+Check stop loss levels for open positions
+Run periodic optimization (weekly)
+
+# Specific Quantitative Metrics to Monitor
+Track these metrics to assess strategy performance:
+
+Risk-adjusted return metrics:
+
+Sharpe Ratio (>1.0 is good, >2.0 is excellent)
+Sortino Ratio (focus on downside deviation)
+Calmar Ratio (return vs. max drawdown)
+
+
+Drawdown metrics:
+
+Maximum drawdown (should stay below your defined max_drawdown parameter)
+Average drawdown
+Drawdown duration
+
+
+Trade quality metrics:
+
+Win rate (aim for >55%)
+Average win vs. average loss (profit factor)
+Expectancy per trade
+
+# Maintenance and Adaptation
+For sustainable performance:
+
+Weekly strategy review:
+
+Run hyperopt at least monthly on recent data
+Check if market conditions have changed
+Review risk parameters based on performance
+
+
+Market regime detection:
+
+Monitor ADX for trending vs. ranging markets
+Adjust strategy parameters based on volatility
+
+
+Portfolio balancing:
+
+Review performance by coin category
+Adjust whitelist based on sector performance
+
+
+
 ### Software requirements
 
 - [Python >= 3.10](http://docs.python-guide.org/en/latest/starting/installation/)
